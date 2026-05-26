@@ -1,8 +1,8 @@
 import express from "express";
 import authMiddleware from "../middlewares/auth.middleware.js";
 import upload from "../middlewares/upload.middleware.js";
-import { getAllUsers, getFollowers, getFollowing, getUserProfile, searchUsers, toggleFollowUser, updateProfile, uploadAvatar, getSuggestedUsers, getFollowRequests, acceptFollowRequest, rejectFollowRequest, getSentFollowRequests, blockUser, unblockUser } from "../controllers/user.controller.js";
 import optionalAuth from "../middlewares/optionalAuth.middleware.js";
+import { getAllUsers, getFollowers, getFollowing, getUserProfile, searchUsers, toggleFollowUser, updateProfile, uploadAvatar, getSuggestedUsers, getFollowRequests, acceptFollowRequest, rejectFollowRequest, getSentFollowRequests, blockUser, unblockUser, getSearchHistory, saveSearchQuery, clearSearchHistory } from "../controllers/user.controller.js";
 
 
 const userRouter = express.Router();
@@ -20,8 +20,15 @@ userRouter.put("/:id/accept-request", authMiddleware, acceptFollowRequest);
 userRouter.put("/:id/reject-request", authMiddleware, rejectFollowRequest);
 userRouter.get("/all", authMiddleware, getAllUsers);
 userRouter.get("/search", authMiddleware, searchUsers);
+
+// Search history routes
+userRouter.get("/search-history", authMiddleware, getSearchHistory);
+userRouter.post("/search-history", authMiddleware, saveSearchQuery);
+userRouter.delete("/search-history", authMiddleware, clearSearchHistory);
+
 userRouter.get("/:username", optionalAuth, getUserProfile);
 userRouter.get("/:id/followers", authMiddleware, getFollowers);
 userRouter.get("/:id/following", authMiddleware, getFollowing);
 
 export default userRouter;
+
